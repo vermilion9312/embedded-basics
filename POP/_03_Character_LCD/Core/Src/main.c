@@ -25,6 +25,7 @@
 #include "button.h"
 #include "led.h"
 #include "uart.h"
+#include "lcd.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -80,7 +81,8 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-
+  CLCD_GPIO_Init();
+  CLCD_Init();
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -107,6 +109,9 @@ int main(void)
 
   while (1)
   {
+	  static uint8_t count;
+	  operate_lcd_top("%03d", count++);
+	  HAL_Delay(1000);
 
     /* USER CODE END WHILE */
 
@@ -223,6 +228,10 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOD_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOE, GPIO_PIN_2|GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_6
+                          |GPIO_PIN_7|GPIO_PIN_0|GPIO_PIN_1, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, RIGHT_BLUE_Pin|RIGHT_GREEN_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
@@ -230,6 +239,15 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(RIGHT_RED_GPIO_Port, RIGHT_RED_Pin, GPIO_PIN_SET);
+
+  /*Configure GPIO pins : PE2 PE4 PE5 PE6
+                           PE7 PE0 PE1 */
+  GPIO_InitStruct.Pin = GPIO_PIN_2|GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_6
+                          |GPIO_PIN_7|GPIO_PIN_0|GPIO_PIN_1;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOE, &GPIO_InitStruct);
 
   /*Configure GPIO pin : BUTTON_1_Pin */
   GPIO_InitStruct.Pin = BUTTON_1_Pin;
