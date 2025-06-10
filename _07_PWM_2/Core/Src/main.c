@@ -141,7 +141,7 @@ int main(void)
   receive_data();
 //  TIM10->CCR1 = 42;
   static bool turn_falg;
-  static uint16_t ccr = 300;
+  static uint16_t ccr;
   static bool button_state;
   static bool last_button_state;
 
@@ -156,30 +156,31 @@ int main(void)
   TIM5->CCR4 = 0;
 
   uint8_t buffer[16];
+
   while (1)
   {
 
-	  button_state = HAL_GPIO_ReadPin(BUTTON_1_GPIO_Port, BUTTON_1_Pin);
-	  button_state_2 = HAL_GPIO_ReadPin(BUTTON_2_GPIO_Port, BUTTON_2_Pin);
-
-	  if (!last_button_state && button_state)
-	  {
-		  if (ccr_state)
-		  {
-			  ccr = 210;
-			  ccr_state = !ccr_state;
-		  }
-		  else
-		  {
-			  ccr = 1285;
-			  ccr_state = !ccr_state;
-		  }
-	  }
-
-	  TIM10->CCR1 = ccr;
-
-	  last_button_state = button_state;
-	  last_button_state_2 = button_state_2;
+//	  button_state = HAL_GPIO_ReadPin(BUTTON_1_GPIO_Port, BUTTON_1_Pin);
+//	  button_state_2 = HAL_GPIO_ReadPin(BUTTON_2_GPIO_Port, BUTTON_2_Pin);
+//
+//	  if (!last_button_state && button_state)
+//	  {
+//		  if (ccr_state)
+//		  {
+//			  ccr = 210;
+//			  ccr_state = !ccr_state;
+//		  }
+//		  else
+//		  {
+//			  ccr = 1285;
+//			  ccr_state = !ccr_state;
+//		  }
+//	  }
+//
+//	  TIM10->CCR1 = ccr;
+//
+//	  last_button_state = button_state;
+//	  last_button_state_2 = button_state_2;
 //	  if (ccr > 257)
 //	  {
 //		  turn_falg = true;
@@ -196,15 +197,12 @@ int main(void)
 
 
 
-//	  __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_1, ccr);
-//	  htim4.Instance->CCR1 = ccr;
-//	  TIM4->CCR1 = ccr;
-//	  ccr += 1000;
-//	  if (ccr > TIM4->ARR) ccr = 0;
-//	  HAL_Delay(50);
-//	  static uint8_t count;
-//	  operate_lcd_top("%03d", count++);
-//	  HAL_Delay(1000);
+
+
+	  TIM10->CCR1 = ccr;
+	  ccr += 1000;
+	  if (ccr > TIM10->ARR) ccr = 0;
+	  HAL_Delay(50);
 
     /* USER CODE END WHILE */
 
